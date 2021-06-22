@@ -16,7 +16,7 @@ Find the file `app.properties` in the resources folder and change following vari
 Adding a Command
 ---
 
-Every bot command should be a part of the `com.motyldrogi.bot.command` package and extend the `CommandExecutor` class, implementing the `execute()` method at bare-minimum. The `execute()` method expectes two arguments:
+Every bot command should be a part of the `com.motyldrogi.bot.command` package and implement the `CommandExecutor` class, implementing the `execute()` method at bare-minimum. The `execute()` method expectes two arguments:
 
 - **data (String)**: The full message, minus the command prefix
 - **tMessage (TwitchMessage)**: The `TwitchMessage` object which contains the full information about the message
