@@ -52,6 +52,14 @@ public class EchoCommand implements CommandExecutor {
 }
 ```
 
+If you created a command, you have to register it:
+```java
+this.commandRegistry.registerByExecutors(
+    [...],
+    new EchoCommand()
+);
+```
+
 ## Features
 - [x] Easy to add commands
 - [x] Localization
