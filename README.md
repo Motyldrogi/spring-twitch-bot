@@ -4,6 +4,15 @@ Twitch all-purpose bot, made using Spring Boot 2.5.1, WebFlux, Project Reactor a
 **TravisCI**<br>
 [![travis-icon]][travis]
 
+Requirements for connection
+---
+Find the file `app.properties` in the resources folder and change following variables:
+
+- **prefix**: The prefix for all command
+- **oauthToken**: OAuth Token of the bot with at least the scopes `chat:read` and `chat:edit`, https://twitchtokengenerator.com/
+- **nickname**: Twitch username of the bot account
+- **channel**: The name of the channel in which the bot should join
+
 Adding a Command
 ---
 
