@@ -36,8 +36,8 @@ public class TwitchServiceImpl implements TwitchService {
 
     @Override
     public void startBot() {
-		this.authorize();
-		this.joinChannel();
+        this.authorize();
+        this.joinChannel();
     }
 
     public TwitchServiceImpl(MessageComponent messageComponent, AppProperties properties) {
