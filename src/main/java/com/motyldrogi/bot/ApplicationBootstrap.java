@@ -32,7 +32,8 @@ public class ApplicationBootstrap implements CommandLineRunner {
     this.commandRegistry.registerByExecutors(
       new EchoCommand(),
       new CounterCommand(),
-      new DiceCommand()
+      new DiceCommand(),
+      new AccountAgeCommand()
     );
   }
 }
