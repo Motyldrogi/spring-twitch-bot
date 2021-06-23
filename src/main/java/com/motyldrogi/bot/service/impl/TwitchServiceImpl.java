@@ -13,8 +13,6 @@ import com.motyldrogi.bot.component.TwitchMessage;
 import com.motyldrogi.bot.configuration.AppProperties;
 import com.motyldrogi.bot.service.TwitchService;
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.Metrics;
 import reactor.core.scheduler.Schedulers;
 
 public class TwitchServiceImpl implements TwitchService {
@@ -30,9 +28,6 @@ public class TwitchServiceImpl implements TwitchService {
     private boolean isAuthenticated = false;
 
     private Map<String, Command> commandRegistry;
-    
-    private Map<String, Counter> commandMetrics;
-    private Counter totalBotCommands_counter;
 
     @Override
     public void startBot() {
@@ -45,7 +40,6 @@ public class TwitchServiceImpl implements TwitchService {
         this.connection.connect();
 
         this.commandRegistry = new HashMap<String, Command>();
-        this.commandMetrics = new HashMap<String, Counter>();
 
         this.messageComponent = messageComponent;
 
@@ -54,25 +48,11 @@ public class TwitchServiceImpl implements TwitchService {
 		this.nickname = properties.getNickname();
 		this.channel = properties.getChannel();
         this.prefix = properties.getPrefix();
-
-        // Enable metrics for schedulers
-        Schedulers.enableMetrics();
-
-        // Build the counter to gather metrics
-        this.totalBotCommands_counter = Counter.builder("botcommand_total_counter")
-            .description("Total invocations of all bot commands")
-            .register(Metrics.globalRegistry);
     }
 
     @Override
     public void registerCommand(String command, Command botCommand) {
         this.commandRegistry.put(command, botCommand);
-        
-        // Build the counter to gather metrics
-        Counter counter = Counter.builder("botcommand_" + command + "_counter")
-            .description("Invocation of the " + command + " command")
-            .register(Metrics.globalRegistry);
-        this.commandMetrics.put(command, counter);
     }
 
     @Override
@@ -91,7 +71,7 @@ public class TwitchServiceImpl implements TwitchService {
         this.connection.send("NICK " + this.nickname);
 
         // Subscribe to the Flux stream and process the messages as they come in
-        this.connection.getMessagesFlux().metrics().subscribeOn(Schedulers.parallel()).subscribe(message -> {
+        this.connection.getMessagesFlux().subscribeOn(Schedulers.parallel()).subscribe(message -> {
             processMessage(message);
         });
 
@@ -163,10 +143,6 @@ public class TwitchServiceImpl implements TwitchService {
             }
 
             String retMessage = botCommand.getExecutor().execute(data, tMessage, messageComponent);
-
-            // Increment the counters
-            this.commandMetrics.get(command).increment();
-            this.totalBotCommands_counter.increment();
 
             this.sendMessage(retMessage);
         }

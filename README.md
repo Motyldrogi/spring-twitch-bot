@@ -1,5 +1,5 @@
 # Spring Boot Twitch Bot
-Twitch all-purpose bot, made using Spring Boot 2.5.1, WebFlux, Project Reactor and Micrometer Monitoring.
+Twitch all-purpose bot, made using Spring Boot 2.5.1, WebFlux and Project Reactor.
 
 **TravisCI**<br>
 [![travis-icon]][travis]
