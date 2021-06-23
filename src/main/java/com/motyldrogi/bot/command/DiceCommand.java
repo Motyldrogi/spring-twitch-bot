@@ -17,7 +17,7 @@ public class DiceCommand implements CommandExecutor {
 
     @CommandInfo("dice")
     @Override
-    public String execute(String data, TwitchMessage tMessage, MessageComponent messageComponent) {
+    public String execute(TwitchMessage tMessage, MessageComponent messageComponent) {
         
         return "@" + tMessage.getSentBy() + " You rolled: " + (rand.nextInt(6) + 1);
     }

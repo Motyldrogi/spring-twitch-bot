@@ -9,8 +9,8 @@ public class EchoCommand implements CommandExecutor {
 
     @CommandInfo(value = "echo", minArguments = 1, maxArguments = 1, usage = "<message>")
     @Override
-    public String execute(String data, TwitchMessage tMessage, MessageComponent messageComponent) {
+    public String execute(TwitchMessage tMessage, MessageComponent messageComponent) {
 
-        return "@" + tMessage.getSentBy() + " " + data;
+        return "@" + tMessage.getSentBy() + " " + tMessage.getData();
     }
 }

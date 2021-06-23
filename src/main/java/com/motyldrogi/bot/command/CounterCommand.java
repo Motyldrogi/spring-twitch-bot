@@ -15,7 +15,7 @@ public class CounterCommand implements CommandExecutor {
 
     @CommandInfo("counter")
     @Override
-    public String execute(String data, TwitchMessage tMessage, MessageComponent messageComponent) {
+    public String execute(TwitchMessage tMessage, MessageComponent messageComponent) {
         
         this.counter++;
         return "The counter is currently at " + this.counter;

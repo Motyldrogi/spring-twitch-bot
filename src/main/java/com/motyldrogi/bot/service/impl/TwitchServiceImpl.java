@@ -117,7 +117,7 @@ public class TwitchServiceImpl implements TwitchService {
             System.out.println("done!");
         } else {
             // Not an internal command, see if it's a bot command
-            TwitchMessage tMessage = new TwitchMessage(message);
+            TwitchMessage tMessage = new TwitchMessage(message, this.prefix);
             System.out.println(tMessage.getSentBy() + ": " + tMessage.getMessage());
             if (tMessage.getMessage().startsWith(this.prefix)) {
                 processCommand(tMessage);
@@ -126,11 +126,8 @@ public class TwitchServiceImpl implements TwitchService {
     }
 
     private void processCommand(TwitchMessage tMessage) {
-        String command = tMessage.getMessage().split(" ")[0].replace(this.prefix, "");
-        String data = tMessage.getMessage().replace(this.prefix + command, "").trim();
-
-        if (this.commandRegistry.keySet().contains(command)) {
-            Command botCommand = this.commandRegistry.get(command);
+        if (this.commandRegistry.keySet().contains(tMessage.getCommand())) {
+            Command botCommand = this.commandRegistry.get(tMessage.getCommand());
 
             List<String> args = Arrays.stream(tMessage.getMessage().split(" ")).skip(1)
                     .collect(Collectors.toList());
@@ -142,7 +139,7 @@ public class TwitchServiceImpl implements TwitchService {
                 return;
             }
 
-            String retMessage = botCommand.getExecutor().execute(data, tMessage, messageComponent);
+            String retMessage = botCommand.getExecutor().execute(tMessage, messageComponent);
 
             this.sendMessage(retMessage);
         }

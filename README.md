@@ -67,13 +67,10 @@ this.commandRegistry.registerByExecutors(
 
 ## Endpoints
 
-| Method                                             | 
-| -------------------------------------------------- |               
-| **GET  /actuator/** |
-| **GET  /actuator/health** |
-| **GET  /actuator/metrics** |
-| **GET  /actuator/info** |
-| **GET  /actuator/prometheus** |
+| Method                                             | Success status codes   | Error status codes |
+| -------------------------------------------------- | ---------------------  | ------------------ |             
+| **GET  /actuator/** | 200                    | 404                |
+| **GET  /actuator/health** | 200                    | 404                |
 
 [travis-icon]: https://www.travis-ci.com/Motyldrogi/spring-twitch-bot.svg?token=BAY6DRwNfoKsyPs22bzN&branch=main
 [travis]: https://www.travis-ci.com/github/Motyldrogi/spring-twitch-bot/
