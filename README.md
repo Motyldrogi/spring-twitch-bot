@@ -18,7 +18,6 @@ Adding a Command
 
 Every bot command should be a part of the `com.motyldrogi.bot.command` package and implement the `CommandExecutor` class, implementing the `execute()` method at bare-minimum. The `execute()` method expectes two arguments:
 
-- **data (String)**: The full message, minus the command prefix
 - **tMessage (TwitchMessage)**: The `TwitchMessage` object which contains the full information about the message
 - **messageComponent (MessageComponent)**: The `MessageComponent` object which contains the texts for localization
 
@@ -45,9 +44,9 @@ public class EchoCommand implements CommandExecutor {
 
     @CommandInfo(value = "echo", minArguments = 1, maxArguments = 1, usage = "<message>")
     @Override
-    public String execute(String data, TwitchMessage tMessage, MessageComponent messageComponent) {
+    public String execute(TwitchMessage tMessage, MessageComponent messageComponent) {
 
-        return "@" + tMessage.getSentBy() + " " + data;
+        return "@" + tMessage.getSentBy() + " " + tMessage.getData();
     }
 }
 ```
