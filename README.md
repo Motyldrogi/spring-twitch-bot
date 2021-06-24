@@ -1,5 +1,5 @@
 # Spring Boot Twitch Bot
-Twitch all-purpose bot, made using Spring Boot 2.5.1, WebFlux, REST and Project Reactor.
+Twitch all-purpose bot, made using Spring Boot 2.5.1, WebFlux, JPA, Hibernate, REST, HikariCP and Project Reactor.
 
 **TravisCI**<br>
 [![travis-icon]][travis]
@@ -59,16 +59,16 @@ this.commandRegistry.registerByExecutors(
 
 ## Features
 - [x] Easy to add commands
-- [x] Localization
+- [x] Database Storage
 - [x] Twitch API Access
-- [x] 3 types of basic commands
+- [x] Public rest api without oauth
 
 ## Endpoints
 
-| Method                                             | Success status codes   | Error status codes |
-| -------------------------------------------------- | ---------------------  | ------------------ |             
-| **GET  /actuator/** | 200                    | 404                |
-| **GET  /actuator/health** | 200                    | 404                |
+| Method                                             | Optional query parameters      | Success status codes   | Error status codes |
+| -------------------------------------------------- | --------------------------     | ---------------------  | ------------------ |                   
+| **GET  /api/counters**                             | page, size                     | 200                    |                    |
+| **GET  /api/counters/by-name/{name}**              |                                | 200                    | 404                |
 
 [travis-icon]: https://www.travis-ci.com/Motyldrogi/spring-twitch-bot.svg?token=BAY6DRwNfoKsyPs22bzN&branch=main
 [travis]: https://www.travis-ci.com/github/Motyldrogi/spring-twitch-bot/
