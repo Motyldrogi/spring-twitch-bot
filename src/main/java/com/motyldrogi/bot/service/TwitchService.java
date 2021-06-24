@@ -17,9 +17,5 @@ public interface TwitchService {
 
     void authorize();
 
-    void joinChannel();
-
-    void sendMessage(String message);
-
     void waitForAuthentication(int waitSeconds);
 }

@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.motyldrogi.bot.command.defaults.Command;
+import com.motyldrogi.bot.command.defaults.CommandSender;
+import com.motyldrogi.bot.command.defaults.impl.CommandSenderImpl;
 import com.motyldrogi.bot.component.IRCConnection;
 import com.motyldrogi.bot.component.MessageComponent;
 import com.motyldrogi.bot.component.TwitchMessage;
@@ -21,7 +23,6 @@ public class TwitchServiceImpl implements TwitchService {
 
     private String oauth;
     private String nickname;
-    private String channel;
     private String prefix;
 
     private IRCConnection connection;
@@ -32,11 +33,10 @@ public class TwitchServiceImpl implements TwitchService {
     @Override
     public void startBot() {
         this.authorize();
-        this.joinChannel();
     }
 
     public TwitchServiceImpl(MessageComponent messageComponent, AppProperties properties) {
-        this.connection = new IRCConnection("irc.chat.twitch.tv", 6667);
+        this.connection = new IRCConnection("irc.chat.twitch.tv", 6667, properties.getChannel());
         this.connection.connect();
 
         this.commandRegistry = new HashMap<String, Command>();
@@ -46,7 +46,6 @@ public class TwitchServiceImpl implements TwitchService {
         // Get properties
         this.oauth = "oauth:" + properties.getOauthToken();
 		this.nickname = properties.getNickname();
-		this.channel = properties.getChannel();
         this.prefix = properties.getPrefix();
     }
 
@@ -79,21 +78,11 @@ public class TwitchServiceImpl implements TwitchService {
     }
 
     @Override
-    public void joinChannel() {
-        this.connection.send("JOIN #" + this.channel);
-        System.out.println("Joined to #" + this.channel);
-    }
-
-    @Override
-    public void sendMessage(String message) {
-        this.connection.send("PRIVMSG #" + this.channel + " :" + message);
-    }
-
-    @Override
     public void waitForAuthentication(int waitSeconds) {
         int count = 0;
         while (count < waitSeconds) {
             if (this.isAuthenticated) {
+                this.connection.joinChannel();
                 return;
             } else {
                 count++;
@@ -128,6 +117,7 @@ public class TwitchServiceImpl implements TwitchService {
     private void processCommand(TwitchMessage tMessage) {
         if (this.commandRegistry.keySet().contains(tMessage.getCommand())) {
             Command botCommand = this.commandRegistry.get(tMessage.getCommand());
+            CommandSender commandSender = new CommandSenderImpl(this.connection, messageComponent);
 
             List<String> args = Arrays.stream(tMessage.getMessage().split(" ")).skip(1)
                     .collect(Collectors.toList());
@@ -135,13 +125,11 @@ public class TwitchServiceImpl implements TwitchService {
             if ((args.size() < botCommand.getMinArguments()) || (args.size() > botCommand.getMaxArguments())) {
                 String usage = prefix + botCommand.getName() + " " + botCommand.getUsage();
                 String invalidMessage = messageComponent.get("invalid-pattern", usage);
-                this.sendMessage(invalidMessage);
+                this.connection.sendMessage(invalidMessage);
                 return;
             }
 
-            String retMessage = botCommand.getExecutor().execute(tMessage, messageComponent);
-
-            this.sendMessage(retMessage);
+            botCommand.getExecutor().execute(tMessage, commandSender);
         }
     }
 }

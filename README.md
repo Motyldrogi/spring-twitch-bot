@@ -19,11 +19,9 @@ Adding a Command
 Every bot command should be a part of the `com.motyldrogi.bot.command` package and implement the `CommandExecutor` class, implementing the `execute()` method at bare-minimum. The `execute()` method expectes two arguments:
 
 - **tMessage (TwitchMessage)**: The `TwitchMessage` object which contains the full information about the message
-- **messageComponent (MessageComponent)**: The `MessageComponent` object which contains the texts for localization
+- **commandSender (CommandSender)**: The class for sending messages and also for localization
 
-The `execute()` method needs a `CommandInfo()` annotation to work and it should return a String, which will be sent back to the channel it was received from.
-
-`CommandInfo()` annotation can have the following arguments:
+The `execute()` method needs a `CommandInfo()` annotation to work, the `CommandInfo()` annotation can have the following arguments:
 
 - **value**: The value that triggers the command, i.e. after the prefix
 - **minArguments**: Minimum arguments count for the command, defaults to 0
@@ -37,16 +35,16 @@ package com.motyldrogi.bot.command;
 
 import com.motyldrogi.bot.command.defaults.CommandExecutor;
 import com.motyldrogi.bot.command.defaults.CommandInfo;
-import com.motyldrogi.bot.component.MessageComponent;
+import com.motyldrogi.bot.command.defaults.CommandSender;
 import com.motyldrogi.bot.component.TwitchMessage;
 
 public class EchoCommand implements CommandExecutor {
 
     @CommandInfo(value = "echo", minArguments = 1, maxArguments = 1, usage = "<message>")
     @Override
-    public String execute(TwitchMessage tMessage, MessageComponent messageComponent) {
+    public void execute(TwitchMessage tMessage, CommandSender commandSender) {
 
-        return "@" + tMessage.getSentBy() + " " + tMessage.getData();
+        commandSender.sendRawMessage("@" + tMessage.getSentBy() + " " + tMessage.getData());
     }
 }
 ```

@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.motyldrogi.bot.command.defaults.CommandExecutor;
 import com.motyldrogi.bot.command.defaults.CommandInfo;
-import com.motyldrogi.bot.component.MessageComponent;
+import com.motyldrogi.bot.command.defaults.CommandSender;
 import com.motyldrogi.bot.component.TwitchMessage;
 
 public class DiceCommand implements CommandExecutor {
@@ -17,8 +17,8 @@ public class DiceCommand implements CommandExecutor {
 
     @CommandInfo("dice")
     @Override
-    public String execute(TwitchMessage tMessage, MessageComponent messageComponent) {
+    public void execute(TwitchMessage tMessage, CommandSender commandSender) {
         
-        return "@" + tMessage.getSentBy() + " You rolled: " + (rand.nextInt(6) + 1);
+        commandSender.sendRawMessage("@" + tMessage.getSentBy() + " You rolled: " + (rand.nextInt(6) + 1));
     }
 }

@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 import com.mashape.unirest.http.Unirest;
 import com.motyldrogi.bot.command.defaults.CommandExecutor;
 import com.motyldrogi.bot.command.defaults.CommandInfo;
-import com.motyldrogi.bot.component.MessageComponent;
+import com.motyldrogi.bot.command.defaults.CommandSender;
 import com.motyldrogi.bot.component.TwitchMessage;
 import com.motyldrogi.bot.util.RestServiceType;
 
@@ -22,7 +22,7 @@ public class AccountAgeCommand implements CommandExecutor {
     
   @CommandInfo("accage")
   @Override
-  public String execute(TwitchMessage tMessage, MessageComponent messageComponent) {
+  public void execute(TwitchMessage tMessage, CommandSender commandSender) {
     try {
       HttpResponse<JsonNode> httpResponse = Unirest.get(RestServiceType.TWITCH_API_URL + "users?login=" + tMessage.getSentBy())
           .header("Accept", "application/vnd.twitchtv.v5+json")
@@ -37,11 +37,10 @@ public class AccountAgeCommand implements CommandExecutor {
       Date date = format.parse(createdAt.substring(0, createdAt.lastIndexOf(".")));
 			DateFormat newFormat = new SimpleDateFormat("d. MMM yyyy");
 
-      return "@" + tMessage.getSentBy() + ", your account was created on " + newFormat.format(date) + ".";
+      commandSender.sendRawMessage("@" + tMessage.getSentBy() + ", your account was created on " + newFormat.format(date) + ".");
 
     } catch (InterruptedException | ExecutionException | ParseException e) {
-      e.printStackTrace();
-      return "Couldn't get data from twitch.";
+      commandSender.sendRawMessage("Couldn't get data from twitch.");;
     }
   }
 }
