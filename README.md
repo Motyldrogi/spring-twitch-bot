@@ -1,5 +1,5 @@
 # Spring Boot Twitch Bot
-Twitch all-purpose bot, made using Spring Boot 2.5.1, WebFlux, JPA, Hibernate, REST, HikariCP and Project Reactor.
+Twitch all-purpose bot, made using Spring Boot, WebFlux, JPA, Hibernate, REST, HikariCP and Project Reactor.
 
 **TravisCI**<br>
 [![travis-icon]][travis]
